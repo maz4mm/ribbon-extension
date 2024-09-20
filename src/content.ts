@@ -11,10 +11,11 @@ function getMetaContentByName(metaName: string): string | null {
   return metaElement ? metaElement.getAttribute('content') : null;
 }
 
-// Load options before injecting the script
-chrome.storage.sync.get(['repoUrl', 'pageUrls'], (result) => {
+// Load options and ribbon visibility state before injecting the script
+chrome.storage.sync.get(['repoUrl', 'pageUrls', 'ribbonVisible'], (result) => {
   repoUrl = result.repoUrl || '';
   pageUrls = result.pageUrls ? result.pageUrls.split(',').map((url: string) => url.trim()) : [];
+  ribbonVisible = result.ribbonVisible !== undefined ? result.ribbonVisible : true;
 
   if (shouldRunOnThisPage()) {
     injectRibbonScript();
@@ -35,20 +36,24 @@ function injectRibbonScript(): void {
 
   script.onload = () => {
     const sha = getMetaContentByName('revision-short-sha') || 'N/A';
-    document.dispatchEvent(new CustomEvent('showRibbon', { detail: { sha, repoUrl } }));
-    ribbonVisible = true;
+    if (ribbonVisible) {
+      document.dispatchEvent(new CustomEvent('showRibbon', { detail: { sha, repoUrl } }));
+    }
   };
 }
 
 function toggleRibbon(): void {
-  if (isMeetsmorePage()) {
+  if (shouldRunOnThisPage()) {
     const sha = getMetaContentByName('revision-short-sha') || 'N/A';
     if (ribbonVisible) {
       document.dispatchEvent(new CustomEvent('hideRibbon'));
     } else {
-      document.dispatchEvent(new CustomEvent('showRibbon', { detail: { sha } }));
+      document.dispatchEvent(new CustomEvent('showRibbon', { detail: { sha, repoUrl } }));
     }
     ribbonVisible = !ribbonVisible;
+
+    // Save the new ribbon visibility state
+    chrome.storage.sync.set({ ribbonVisible });
   }
 }
 

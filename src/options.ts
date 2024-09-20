@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('optionsForm') as HTMLFormElement;
   const repoInput = document.getElementById('repoUrl') as HTMLInputElement;
   const pagesInput = document.getElementById('pageUrls') as HTMLInputElement;
+  const status = document.getElementById('status');
 
   // Load saved options
   chrome.storage.sync.get(['repoUrl', 'pageUrls'], (result) => {
@@ -19,12 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       () => {
         // Update status to let user know options were saved.
-        const status = document.getElementById('status');
         if (status) {
           status.textContent = 'Options saved.';
+          status.style.display = 'block';
           setTimeout(() => {
-            status.textContent = '';
-          }, 750);
+            status.style.display = 'none';
+          }, 3000);
         }
       }
     );

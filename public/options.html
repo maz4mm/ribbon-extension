@@ -3,19 +3,85 @@
 
 <head>
   <title>Revision Display Extension Options</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #333;
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #status {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #e7f3fe;
+      border-left: 5px solid #2196F3;
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
-  <form id="optionsForm">
-    <label for="repoUrl">GitHub Repository URL:</label>
-    <input type="text" id="repoUrl" name="repoUrl">
-    <br><br>
-    <label for="pageUrls">Pages to run on (comma-separated):</label>
-    <input type="text" id="pageUrls" name="pageUrls">
-    <br><br>
-    <button type="submit">Save</button>
-  </form>
-  <div id="status"></div>
+  <div class="container">
+    <h1>Revision Display Extension Options</h1>
+    <form id="optionsForm">
+      <label for="repoUrl">GitHub Repository URL:</label>
+      <input type="text" id="repoUrl" name="repoUrl" placeholder="https://github.com/username/repository">
+
+      <label for="pageUrls">Pages to run on (comma-separated):</label>
+      <input type="text" id="pageUrls" name="pageUrls" placeholder="example.com, another-example.com">
+
+      <button type="submit">Save</button>
+    </form>
+    <div id="status"></div>
+  </div>
   <script src="options.js"></script>
 </body>
 
