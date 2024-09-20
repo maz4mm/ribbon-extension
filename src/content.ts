@@ -2,10 +2,6 @@ let ribbonVisible = false;
 let repoUrl: string = '';
 let pageUrls: string[] = [];
 
-function isMeetsmorePage(): boolean {
-  return window.location.hostname.includes('meetsmore.com');
-}
-
 function getMetaContentByName(metaName: string): string | null {
   const metaElement = document.querySelector(`meta[name="${metaName}"]`);
   return metaElement ? metaElement.getAttribute('content') : null;
@@ -23,8 +19,9 @@ chrome.storage.sync.get(['repoUrl', 'pageUrls', 'ribbonVisible'], (result) => {
 });
 
 function shouldRunOnThisPage(): boolean {
+  // If no page URLs are specified, don't run the extension
   if (pageUrls.length === 0) {
-    return true; // Run on all pages if no specific pages are set
+    return false;
   }
   return pageUrls.some(url => window.location.href.includes(url));
 }
@@ -59,8 +56,15 @@ function toggleRibbon(): void {
 
 chrome.runtime.onMessage.addListener((request: { action: string }, sender, sendResponse) => {
   if (request.action === "toggleRibbon") {
-    toggleRibbon();
+    if (shouldRunOnThisPage()) {
+      toggleRibbon();
+      sendResponse({ status: 'toggled' });
+    } else {
+      sendResponse({ status: 'not_applicable' });
+    }
   }
 });
 
-injectRibbonScript();
+if (shouldRunOnThisPage()) {
+  injectRibbonScript();
+}
