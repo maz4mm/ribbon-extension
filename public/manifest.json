@@ -3,7 +3,7 @@
   "name": "Revision Display Extension",
   "version": "1.0",
   "description": "Display revision number using DevelopmentRibbon on meetsmore.com",
-  "permissions": ["activeTab", "tabs"],
+  "permissions": ["activeTab", "tabs", "storage"],
   "background": {
     "service_worker": "background.js"
   },
@@ -21,5 +21,6 @@
       "resources": ["VersionRibbon.js"],
       "matches": ["<all_urls>"]
     }
-  ]
+  ],
+  "options_page": "options.html"
 }

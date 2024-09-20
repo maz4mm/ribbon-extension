@@ -1,4 +1,6 @@
 let ribbonVisible = false;
+let repoUrl: string = '';
+let pageUrls: string[] = [];
 
 function isMeetsmorePage(): boolean {
   return window.location.hostname.includes('meetsmore.com');
@@ -9,19 +11,33 @@ function getMetaContentByName(metaName: string): string | null {
   return metaElement ? metaElement.getAttribute('content') : null;
 }
 
-function injectRibbonScript(): void {
-  if (isMeetsmorePage()) {
-    const script = document.createElement('script');
-    script.src = chrome.runtime.getURL('VersionRibbon.js');
-    (document.head || document.documentElement).appendChild(script);
+// Load options before injecting the script
+chrome.storage.sync.get(['repoUrl', 'pageUrls'], (result) => {
+  repoUrl = result.repoUrl || '';
+  pageUrls = result.pageUrls ? result.pageUrls.split(',').map((url: string) => url.trim()) : [];
 
-    // Dispatch showRibbon event after script injection
-    script.onload = () => {
-      const sha = getMetaContentByName('revision-short-sha') || 'N/A';
-      document.dispatchEvent(new CustomEvent('showRibbon', { detail: { sha } }));
-      ribbonVisible = true;
-    };
+  if (shouldRunOnThisPage()) {
+    injectRibbonScript();
   }
+});
+
+function shouldRunOnThisPage(): boolean {
+  if (pageUrls.length === 0) {
+    return true; // Run on all pages if no specific pages are set
+  }
+  return pageUrls.some(url => window.location.href.includes(url));
+}
+
+function injectRibbonScript(): void {
+  const script = document.createElement('script');
+  script.src = chrome.runtime.getURL('VersionRibbon.js');
+  (document.head || document.documentElement).appendChild(script);
+
+  script.onload = () => {
+    const sha = getMetaContentByName('revision-short-sha') || 'N/A';
+    document.dispatchEvent(new CustomEvent('showRibbon', { detail: { sha, repoUrl } }));
+    ribbonVisible = true;
+  };
 }
 
 function toggleRibbon(): void {

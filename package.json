@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc && npm run copy-public",
-    "copy-public": "copyfiles -u 1 public/* dist",
+    "copy-public": "copyfiles -u 1 public/* dist && copyfiles -u 1 src/*.html dist",
     "lint": "eslint src/**/*.ts",
     "format": "prettier --write src/**/*.ts",
     "start": "web-ext run --source-dir ./dist",
