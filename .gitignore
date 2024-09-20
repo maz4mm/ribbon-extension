@@ -1,0 +1,53 @@
+.DS_Store
+node_modules
+*.log
+*.log*
+package-lock.json
+dist
+tags
+.idea
+jsconfig.json
+coverage.lcov
+*credential.json
+.ym_history
+.history
+.env
+.digdag
+.next
+nohup.out
+coverage
+junit.xml
+redoc-static.html
+.next
+tsconfig.tsbuildinfo
+
+# Ecspresso
+ecspresso/configs/*/ecs-service-def.json
+ecspresso/configs/*/ecs-task-def.json
+
+# Potential terraform
+terraform.tfstate
+terraform.tfstate.backup
+.terraform
+
+# .yarn (https://github.com/yarnpkg/berry/issues/454)
+**/.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/patches
+.pnp.*
+
+
+# Playwright
+playwright-report
+playwright-e2e-results
+
+# Maestro
+report.xml
+
+# Turbo
+.turbo
+
+# pnpm
+.pnpm
+.aider*
