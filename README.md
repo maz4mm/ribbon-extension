@@ -20,7 +20,7 @@ This Chrome extension displays the revision number (SHA) of the current page on 
 
 ## How to Build
 
-1. Ensure you have Node.js and npm installed on your system
+1. Ensure you have Node.js installed on your system
 
 2. Clone the repository:
    ```
@@ -29,13 +29,27 @@ This Chrome extension displays the revision number (SHA) of the current page on 
    ```
 
 3. Install dependencies:
+   You can use either npm or pnpm to install dependencies and build the project.
+
+   Using npm:
    ```
    npm install
    ```
 
+   Using pnpm:
+   ```
+   pnpm install
+   ```
+
 4. Build the extension:
+   Using npm:
    ```
    npm run build
+   ```
+
+   Using pnpm:
+   ```
+   pnpm run build
    ```
 
    This command will:
@@ -49,22 +63,34 @@ This Chrome extension displays the revision number (SHA) of the current page on 
 
 ## Development
 
-- Use `npm run build` to compile changes
-- Use `npm run lint` to check for linting errors
-- Use `npm run format` to format the code using Prettier
+- Use `npm run build` or `pnpm run build` to compile changes
+- Use `npm run lint` or `pnpm run lint` to check for linting errors
+- Use `npm run format` or `pnpm run format` to format the code using Prettier
 
 ## Packaging for Distribution
 
 To create a distributable version of the extension:
 
 1. Run the build process:
+   Using npm:
    ```
    npm run build
    ```
 
+   Using pnpm:
+   ```
+   pnpm run build
+   ```
+
 2. Package the extension:
+   Using npm:
    ```
    npm run package
+   ```
+
+   Using pnpm:
+   ```
+   pnpm run package
    ```
 
    This will create a ZIP file in the `web-ext-artifacts` directory, which can be submitted to the Chrome Web Store.
