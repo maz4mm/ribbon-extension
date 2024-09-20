@@ -6,6 +6,8 @@ This Chrome extension displays the revision number (SHA) of the current page on 
 
 - Displays a ribbon with the current revision SHA on meetsmore.com pages
 - Clicking the SHA in the ribbon opens the corresponding GitHub commit page
+- Toggle the ribbon visibility using the extension popup
+- Easy access to options page from the extension popup
 
 ## How to Use
 
@@ -14,7 +16,7 @@ This Chrome extension displays the revision number (SHA) of the current page on 
 3. Navigate to a meetsmore.com page
 4. The ribbon will automatically appear in the bottom-left corner of the page
 5. Click the SHA in the ribbon to view the corresponding commit on GitHub
-6. Use the extension popup to toggle the ribbon visibility
+6. Use the extension popup to toggle the ribbon visibility or access options
 
 ## How to Build
 
