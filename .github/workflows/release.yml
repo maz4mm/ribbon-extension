@@ -1,0 +1,75 @@
+name: Create Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build extension
+        run: pnpm run build
+
+      - name: Package extension
+        run: pnpm run package
+
+      - name: Get version from package.json
+        id: package-version
+        run: |
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          echo "version=${CURRENT_VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Bump version
+        id: bump-version
+        run: |
+          CURRENT_VERSION=${{ steps.package-version.outputs.version }}
+          # Split version into major.minor.patch
+          IFS='.' read -r major minor patch <<< "$CURRENT_VERSION"
+          # Increment minor version
+          NEW_VERSION="${major}.$((minor + 1)).0"
+          echo "new_version=${NEW_VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Update package.json version
+        run: |
+          pnpm version ${{ steps.bump-version.outputs.new_version }} --no-git-tag-version
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.bump-version.outputs.new_version }}
+          name: Release v${{ steps.bump-version.outputs.new_version }}
+          files: |
+            web-ext-artifacts/*.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create version bump PR
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: bump version to ${{ steps.bump-version.outputs.new_version }}"
+          title: "chore: bump version to ${{ steps.bump-version.outputs.new_version }}"
+          body: "Automated version bump after release"
+          branch: "version-bump-${{ steps.bump-version.outputs.new_version }}"
+          base: "main"
